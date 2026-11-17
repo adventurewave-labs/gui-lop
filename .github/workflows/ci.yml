@@ -82,8 +82,10 @@ jobs:
     container:
       image: node:24-slim
     steps:
-      - name: Install git (slim image ships without it; checkout needs it)
-        run: apt-get update && apt-get install -y --no-install-recommends git
+      - name: Install git + ca-certificates (slim ships without either; checkout
+              needs git, and git's HTTPS fetch fails cert verification without
+              a CA bundle — first CI run failed exactly there)
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
 
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
