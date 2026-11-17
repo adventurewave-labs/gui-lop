@@ -7,6 +7,7 @@
 [![arch-lint](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/arch-lint.yml/badge.svg)](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/arch-lint.yml)
 [![bench](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/bench.yml/badge.svg)](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/bench.yml)
 [![docker](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/docker.yml/badge.svg)](https://github.com/adventurewave-labs/GUI-LOP/actions/workflows/docker.yml)
+[![mutation (non-blocking)](https://img.shields.io/badge/mutation-non--blocking%20(score%20below%20ratchet)-orange)](.github/workflows/mutation.yml)
 
 A platform for orchestrating workflows that interleave automated steps with
 human decision points. Built as a domain-driven backend (6 bounded
@@ -16,7 +17,8 @@ and a WebSocket-based real-time channel.
 - **Backend:** Node.js 22+ (24 LTS recommended), Express, WebSocket (`ws`), Postgres + Redis
   (with in-memory fall-backs for dev), JWT auth, OpenAI/Anthropic ACL.
 - **Frontend:** React 18 SPA at `src/frontend/`.
-- **Status:** 560 backend tests passing across 75 suites; 25/25 SLO
+- **Status:** 1186 backend tests passing across 121 suites (9 skipped —
+  measured 2026-11-17 via `npm test`); 25/25 SLO
   benchmarks PASS; six bounded contexts wired through one bootstrap
   composition root.
 
@@ -297,7 +299,13 @@ curl -s http://localhost:3001/api/v1/workflows/$WID \
 ```bash
 # Backend unit + integration suite (no infrastructure needed).
 npx jest --config jest.backend.config.js
-# Expect: 560 passing across 75 suites.
+# Expect: 1186 passing across 121 suites (9 skipped).
+
+# Mutation testing (Stryker, weekly + on demand). NON-BLOCKING while the
+# score sits below the `break` ratchet (63; measured baseline 65.2) — the
+# workflow runs with continue-on-error until the ratchet is earned back.
+# Raise tests, then re-arm it: stryker.config.mjs.
+npm run test:mutation
 
 # Contract suite: same assertions, in-memory + Postgres adapters.
 # Auto-skips cleanly when Docker is unavailable.

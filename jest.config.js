@@ -4,7 +4,6 @@ export default {
 
   // Transform ES modules
   transform: {},
-  extensionsToTreatAsEsm: ['.js'],
 
   // Globals for ES modules
   globals: {
