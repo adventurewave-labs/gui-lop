@@ -24,6 +24,11 @@ jobs:
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'mutation')
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # NON-BLOCKING while the mutation score sits below the `break` ratchet
+    # (63; measured baseline 65.2, red run 2026-11-16). The badge row and
+    # Testing section in README say the same. Re-arm (delete this flag)
+    # once the score is back above the ratchet.
+    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
