@@ -68,3 +68,31 @@ jobs:
 
       - name: Frontend service tests (WebSocket client)
         run: npm run test:frontend-services
+
+  bare-env:
+    # Backend suite in a bare node:24-slim container: Debian GNU userland,
+    # no libpcap, no runner-image conveniences, root umask differs from the
+    # standard image. The suite is in-memory (no services), so it must pass
+    # with zero environment help. Purpose: catch umask- and system-library-
+    # dependent regressions that only show up off the runner image.
+    # Blocking gate alongside backend-tests.
+    name: backend tests (bare node:24-slim)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      image: node:24-slim
+    steps:
+      - name: Install git + ca-certificates (slim ships without either; checkout
+              needs git, and git's HTTPS fetch fails cert verification without
+              a CA bundle — first CI run failed exactly there)
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Backend suite (umask 0002, empty service URLs)
+        run: |
+          bash -c 'umask 0002; echo "umask: $(umask)"; cd $GITHUB_WORKSPACE && NODE_ENV=test DATABASE_URL= REDIS_URL= JWT_SECRET=bare-env-ci-secret npx jest --config jest.backend.config.js --silent'
