@@ -107,11 +107,11 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-env": "^7.29.14",
     "@eslint/js": "^10.0.1",
     "@jest/core": "^30.5.2",
     "@jest/reporters": "^30.5.2",
-    "@playwright/test": "^1.65.0",
+    "@playwright/test": "^1.65.1",
     "@stryker-mutator/core": "^10.1.1",
     "@stryker-mutator/jest-runner": "^10.1.1",
     "@testcontainers/postgresql": "^12.2.1",
@@ -125,8 +125,8 @@
     "artillery-plugin-expect": "^2.20.0",
     "async": "^3.2.6",
     "autocannon": "^8.0.0",
-    "concurrently": "^10.0.6",
-    "eslint": "^10.14.0",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.15.0",
     "eslint-plugin-n": "^18.5.0",
     "eslint-plugin-security": "^4.2.1",
     "form-data": "^4.0.6",
@@ -141,7 +141,7 @@
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.1.10",
-    "supertest": "^7.3.1",
+    "supertest": "^7.3.2",
     "testcontainers": "^12.2.1",
     "typescript": "^5.9.3"
   },
